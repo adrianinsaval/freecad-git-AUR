@@ -1,4 +1,3 @@
-# Maintainer: Grey Christoforo <first name at last name dot net>
 # Maintainer: Adrian Insaurralde <adrianinsaval at gmail dot com>
 
 pkgname=freecad-git
@@ -63,8 +62,8 @@ optdepends=(
 )
 provides=('freecad')
 conflicts=('freecad' 'freecad-appimage' 'freecad-appimage-git')
-source=("git+https://github.com/FreeCAD/FreeCAD.git")
-md5sums=('SKIP')
+#source=("git+https://github.com/FreeCAD/FreeCAD.git")
+#md5sums=('SKIP')
 
 pkgver() {
   cd FreeCAD
@@ -75,6 +74,7 @@ pkgver() {
 }
 
 prepare() {
+  ln -fs ../../FreeCAD
   cd FreeCAD
 }
 
