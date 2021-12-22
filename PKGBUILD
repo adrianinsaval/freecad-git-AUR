@@ -83,11 +83,9 @@ build() {
 
   cmake -Wno-dev -G Ninja -B build -S . \
     -D BUILD_ENABLE_CXX_STD=C++17 \
-    -D BUILD_FEM=ON \
-    -D BUILD_MESH=ON \
+    -D BUILD_RAYTRACING=OFF \
+    -D BUILD_ROBOT=OFF \
     -D BUILD_FLAT_MESH=ON \
-    -D BUILD_MESH_PART=ON \
-    -D BUILD_SHIP=ON \
     -D BUILD_DESIGNER_PLUGIN=ON \
     -D CMAKE_BUILD_TYPE=None \
     -D CMAKE_C_FLAGS="${CFLAGS} -fPIC -w" \
