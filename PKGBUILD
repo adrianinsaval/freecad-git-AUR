@@ -1,9 +1,9 @@
 # Maintainer: Adrian Insaurralde (adrianinsaval) <username at gmail dot com>
 
-pkgname=freecad-git
-pkgver=0.20.0.29110.g80bf800ceb
+pkgname=freecad-opt
+pkgver=0.21.0.29432.g45d7151dfa
 pkgrel=1
-pkgdesc='A general purpose 3D CAD modeler - git checkout'
+pkgdesc='An open source parametric 3D CAD modeler - installed to opt directory - git checkout'
 arch=('x86_64')
 url='https://www.freecad.org/'
 license=('LGPL')
@@ -43,6 +43,7 @@ ninja
 python-shiboken2
 shiboken2
 swig
+gendesk
 )
 checkdepends=(
 fmt 
@@ -57,8 +58,8 @@ optdepends=(
 'python-markdown: markdown support in addon manager'
 'python-gitpython: support downloading addons with git'
 )
-provides=('freecad')
-conflicts=('freecad' 'freecad-appimage' 'freecad-appimage-git')
+#provides=('freecad')
+#conflicts=('freecad' 'freecad-appimage' 'freecad-appimage-git')
 #source=("git+https://github.com/FreeCAD/FreeCAD.git")
 #md5sums=('SKIP')
 
@@ -72,7 +73,10 @@ pkgver() {
 
 prepare() {
   ln -fs ../../FreeCAD
-  cd FreeCAD
+
+  # Create desktop shortcut
+  gendesk -f -n --pkgname "$pkgname" --pkgdesc "$pkgdesc" --name FreeCAD-opt \
+    --mimetypes='application/x-extension-fcstd' --startupnotify=true
 }
 
 build() {
@@ -83,20 +87,13 @@ build() {
     -D BUILD_RAYTRACING=OFF \
     -D BUILD_ROBOT=OFF \
     -D BUILD_FLAT_MESH=ON \
-    -D BUILD_DESIGNER_PLUGIN=ON \
     -D CMAKE_BUILD_TYPE=None \
     -D CMAKE_C_FLAGS="${CFLAGS} -fPIC -w" \
     -D CMAKE_CXX_FLAGS="${CXXFLAGS} -fPIC -w" \
     -D FREECAD_USE_EXTERNAL_PIVY=ON \
     -D FREECAD_USE_QT_FILEDIALOG=ON \
     -D PYTHON_EXECUTABLE=/usr/bin/python \
-    -D INSTALL_TO_SITEPACKAGES=ON \
-    -D CMAKE_INSTALL_PREFIX='/usr/lib/freecad' \
-    -D CMAKE_INSTALL_BINDIR='/usr/lib/freecad/bin' \
-    -D CMAKE_INSTALL_LIBDIR='/usr/lib/freecad/lib' \
-    -D CMAKE_INSTALL_DATADIR='/usr/share/freecad' \
-    -D CMAKE_INSTALL_DATAROOTDIR='/usr/share' \
-    -D CMAKE_INSTALL_DOCDIR='/usr/share/doc/freecad'
+    -D CMAKE_INSTALL_PREFIX="/opt/freecad" \
 
   cmake --build build
 }
@@ -109,17 +106,14 @@ check() {
 package() {
   cd FreeCAD
   DESTDIR="${pkgdir}" cmake --install build
-  
-  # package thumbnailer
-  install src/Tools/freecad-thumbnailer "${pkgdir}/usr/lib/freecad/bin/freecad-thumbnailer"
-  
-  # links for bin
-  mkdir -p "${pkgdir}"/usr/bin
-  FILES="${pkgdir}"/usr/lib/freecad/bin/*
-  for f in $FILES
-  do
-    ln -s '../lib/freecad/bin/'$(basename $f) "${pkgdir}"/usr/bin/$(basename $f)
-  done
 
-  install -Dt "${pkgdir}/usr/share/licenses/${pkgname}" -m644 LICENSE
+  # package desktop shortcut
+  install -Dm644 "${srcdir}/freecad-opt.desktop" "${pkgdir}/usr/share/applications/freecad-opt.desktop"
+  install -d "${pkgdir}/usr/share/pixmaps"
+  ln -s "${pkgdir}/opt/freecad/share/icons/hicolor/scalable/apps/freecad.svg" "${pkgdir}/usr/share/pixmaps/freecad-opt.svg"
+
+  # links for bin
+  install -d "${pkgdir}/usr/bin"
+  ln -s /opt/freecad/bin/FreeCAD "$pkgdir/usr/bin/freecad-opt"
+  ln -s /opt/freecad/bin/FreeCADCmd "$pkgdir/usr/bin/freecadcmd-opt"
 }
