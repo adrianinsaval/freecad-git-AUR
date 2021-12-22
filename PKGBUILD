@@ -1,7 +1,7 @@
-# Maintainer: Grey Christoforo <first name at last name dot net>
+# Maintainer: Adrian Insaurralde (adrianinsaval) <username at gmail dot com>
 
 pkgname=freecad-git
-pkgver=0.20.0.28901.ga5ff515804
+pkgver=0.20.0.29110.g80bf800ceb
 pkgrel=1
 pkgdesc='A general purpose 3D CAD modeler - git checkout'
 arch=('x86_64')
@@ -59,8 +59,8 @@ optdepends=(
 )
 provides=('freecad')
 conflicts=('freecad' 'freecad-appimage' 'freecad-appimage-git')
-source=("git+https://github.com/FreeCAD/FreeCAD.git")
-md5sums=('SKIP')
+#source=("git+https://github.com/FreeCAD/FreeCAD.git")
+#md5sums=('SKIP')
 
 pkgver() {
   cd FreeCAD
@@ -71,6 +71,7 @@ pkgver() {
 }
 
 prepare() {
+  ln -fs ../../FreeCAD
   cd FreeCAD
 }
 
