@@ -1,11 +1,11 @@
 # Maintainer: Adrian Insaurralde (adrianinsaval) <username at gmail dot com>
 
-pkgname=freecad-git-opt
-pkgver=0.20.0.28901.ga5ff515804
+pkgname=freecad-linkdaily
+pkgver=2022.05.20.edge.r0.gd47fafeec3
 pkgrel=1
-pkgdesc='An open source parametric 3D CAD modeler - installed to opt directory - git checkout'
+pkgdesc='An open source parametric 3D CAD modeler - LinkDaily branch by realthunder - installed to opt directory - git checkout'
 arch=('x86_64')
-url='https://www.freecad.org/'
+url='https://github.com/realthunder/FreeCAD'
 license=('LGPL')
 depends=(
 boost-libs
@@ -58,20 +58,17 @@ optdepends=(
 'python-markdown: markdown support in addon manager'
 'python-gitpython: support downloading addons with git'
 )
-source=("git+https://github.com/FreeCAD/FreeCAD.git")
+source=("git+https://github.com/realthunder/FreeCAD.git#branch=LinkDaily")
 md5sums=('SKIP')
 
 pkgver() {
   cd FreeCAD
-  read -d$'/n' -r major minor patch < <(grep -Po "set\(PACKAGE_VERSION_(MAJOR|MINOR|PATCH) \"\K[0-9]*" CMakeLists.txt) || true
-  count=$((24266 + $(git rev-list --count d29fd7d..HEAD) ))
-  hash=$(git rev-parse --short HEAD)
-  printf "%d.%d.%d.%d.g%s" "$major" "$minor" "$patch" "$count" "$hash"
+  git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g;s/_//'
 }
 
 prepare() {
   # Create desktop shortcut
-  gendesk -f -n --pkgname "freecad-daily" --pkgdesc "$pkgdesc" --name FreeCAD-daily \
+  gendesk -f -n --pkgname "freecad-link" --pkgdesc "$pkgdesc" --name "FreeCAD LinkDaily" \
     --mimetypes='application/x-extension-fcstd' --startupnotify=true
 }
 
@@ -89,7 +86,7 @@ build() {
     -D FREECAD_USE_EXTERNAL_PIVY=ON \
     -D FREECAD_USE_QT_FILEDIALOG=ON \
     -D PYTHON_EXECUTABLE=/usr/bin/python \
-    -D CMAKE_INSTALL_PREFIX="/opt/freecad-daily" \
+    -D CMAKE_INSTALL_PREFIX="/opt/freecad-link" \
 
   cmake --build build
 }
@@ -104,12 +101,12 @@ package() {
   DESTDIR="${pkgdir}" cmake --install build
 
   # package desktop shortcut
-  install -Dm644 "${srcdir}/freecad-daily.desktop" "${pkgdir}/usr/share/applications/freecad-daily.desktop"
+  install -Dm644 "${srcdir}/freecad-link.desktop" "${pkgdir}/usr/share/applications/freecad-link.desktop"
   install -d "${pkgdir}/usr/share/pixmaps"
-  ln -s "${pkgdir}/opt/freecad-daily/share/icons/hicolor/scalable/apps/freecad.svg" "${pkgdir}/usr/share/pixmaps/freecad-daily.svg"
+  ln -s "${pkgdir}/opt/freecad-link/share/icons/hicolor/scalable/apps/freecad.svg" "${pkgdir}/usr/share/pixmaps/freecad-link.svg"
 
   # links for bin
   install -d "${pkgdir}/usr/bin"
-  ln -s /opt/freecad-daily/bin/FreeCAD "$pkgdir/usr/bin/freecad-daily"
-  ln -s /opt/freecad-daily/bin/FreeCADCmd "$pkgdir/usr/bin/freecadcmd-daily"
+  ln -s /opt/freecad-link/bin/FreeCAD "$pkgdir/usr/bin/freecad-link"
+  ln -s /opt/freecad-link/bin/FreeCADCmd "$pkgdir/usr/bin/freecadcmd-link"
 }

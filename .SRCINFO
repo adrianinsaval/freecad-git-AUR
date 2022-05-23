@@ -1,8 +1,8 @@
-pkgbase = freecad-git-opt
-	pkgdesc = An open source parametric 3D CAD modeler - installed to opt directory - git checkout
-	pkgver = 0.20.0.28901.ga5ff515804
+pkgbase = freecad-linkdaily
+	pkgdesc = An open source parametric 3D CAD modeler - LinkDaily branch by realthunder - installed to opt directory - git checkout
+	pkgver = 2022.05.20.edge.r0.gd47fafeec3
 	pkgrel = 1
-	url = https://www.freecad.org/
+	url = https://github.com/realthunder/FreeCAD
 	arch = x86_64
 	license = LGPL
 	checkdepends = fmt
@@ -48,7 +48,7 @@ pkgbase = freecad-git-opt
 	optdepends = graphviz: dependency graph support
 	optdepends = python-markdown: markdown support in addon manager
 	optdepends = python-gitpython: support downloading addons with git
-	source = git+https://github.com/FreeCAD/FreeCAD.git
+	source = git+https://github.com/realthunder/FreeCAD.git#branch=LinkDaily
 	md5sums = SKIP
 
-pkgname = freecad-git-opt
+pkgname = freecad-linkdaily
