@@ -1,8 +1,8 @@
-pkgbase = freecad-git-opt
-	pkgdesc = An open source parametric 3D CAD modeler - installed to opt directory - git checkout
-	pkgver = 0.22.0.34522.gd8636dd058
+pkgbase = freecad-realthunder
+	pkgdesc = An open source parametric 3D CAD modeler - LinkMerge branch by realthunder - installed to opt directory - git checkout
+	pkgver = 20230811tip.r48.g34c1d906c6
 	pkgrel = 1
-	url = https://www.freecad.org/
+	url = https://github.com/realthunder/FreeCAD
 	arch = x86_64
 	license = LGPL
 	checkdepends = pugixml
@@ -51,7 +51,7 @@ pkgbase = freecad-git-opt
 	optdepends = graphviz: dependency graph support
 	optdepends = python-pip: support installing python dependencies for addons
 	optdepends = calculix-ccx: FEM solver backend
-	source = git+https://github.com/FreeCAD/FreeCAD.git
+	source = git+https://github.com/realthunder/FreeCAD.git#branch=LinkMerge
 	md5sums = SKIP
 
-pkgname = freecad-git-opt
+pkgname = freecad-realthunder

@@ -1,11 +1,11 @@
 # Maintainer: Adrian Insaurralde <adrianinsaval at gmail dot com>
 
-pkgname=freecad-git-opt
-pkgver=0.22.0.34522.gd8636dd058
+pkgname=freecad-realthunder
+pkgver=20230811tip.r48.g34c1d906c6
 pkgrel=1
-pkgdesc='An open source parametric 3D CAD modeler - installed to opt directory - git checkout'
+pkgdesc='An open source parametric 3D CAD modeler - LinkMerge branch by realthunder - installed to opt directory - git checkout'
 arch=('x86_64')
-url='https://www.freecad.org/'
+url='https://github.com/realthunder/FreeCAD'
 license=('LGPL')
 depends=(
 boost-libs
@@ -61,20 +61,17 @@ optdepends=(
 'python-pip: support installing python dependencies for addons'
 'calculix-ccx: FEM solver backend'
 )
-source=("git+https://github.com/FreeCAD/FreeCAD.git")
+source=("git+https://github.com/realthunder/FreeCAD.git#branch=LinkMerge")
 md5sums=('SKIP')
 
 pkgver() {
   cd FreeCAD
-  read -d$'/n' -r major minor patch < <(grep -Po "set\(PACKAGE_VERSION_(MAJOR|MINOR|PATCH) \"\K[0-9]*" CMakeLists.txt) || true
-  count=$((24266 + $(git rev-list --count d29fd7d..HEAD) ))
-  hash=$(git rev-parse --short HEAD)
-  printf "%d.%d.%d.%d.g%s" "$major" "$minor" "$patch" "$count" "$hash"
+  git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g;s/_//'
 }
 
 prepare() {
   # Create desktop shortcut
-  gendesk -f -n --pkgname "freecad-daily" --pkgdesc "$pkgdesc" --name FreeCAD-daily \
+  gendesk -f -n --pkgname "freecad-realthunder" --pkgdesc "$pkgdesc" --name "FreeCAD (realthunder)" \
     --mimetypes='application/x-extension-fcstd' --startupnotify=true
 }
 
@@ -91,7 +88,7 @@ build() {
     -D CMAKE_CXX_FLAGS="${CXXFLAGS} -fPIC -w" \
     -D FREECAD_USE_EXTERNAL_PIVY=ON \
     -D FREECAD_USE_QT_FILEDIALOG=ON \
-    -D CMAKE_INSTALL_PREFIX="/opt/freecad-daily" \
+    -D CMAKE_INSTALL_PREFIX="/opt/freecad-realthunder" \
 
   cmake --build build
 }
@@ -106,12 +103,12 @@ package() {
   DESTDIR="${pkgdir}" cmake --install build
 
   # package desktop shortcut
-  install -Dm644 "${srcdir}/freecad-daily.desktop" "${pkgdir}/usr/share/applications/freecad-daily.desktop"
+  install -Dm644 "${srcdir}/freecad-realthunder.desktop" "${pkgdir}/usr/share/applications/freecad-link.desktop"
   install -d "${pkgdir}/usr/share/pixmaps"
-  ln -s "${pkgdir}/opt/freecad-daily/share/icons/hicolor/scalable/apps/freecad.svg" "${pkgdir}/usr/share/pixmaps/freecad-daily.svg"
+  ln -s "${pkgdir}/opt/freecad-realthunder/share/icons/hicolor/scalable/apps/freecad.svg" "${pkgdir}/usr/share/pixmaps/freecad-link.svg"
 
   # links for bin
   install -d "${pkgdir}/usr/bin"
-  ln -s /opt/freecad-daily/bin/FreeCAD "$pkgdir/usr/bin/freecad-daily"
-  ln -s /opt/freecad-daily/bin/FreeCADCmd "$pkgdir/usr/bin/freecadcmd-daily"
+  ln -s /opt/freecad-realthunder/bin/FreeCAD "$pkgdir/usr/bin/freecad-realthunder"
+  ln -s /opt/freecad-realthunder/bin/FreeCADCmd "$pkgdir/usr/bin/freecadcmd-realthunder"
 }
